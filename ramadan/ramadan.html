@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>متابعة قراءة القرآن - رمضان</title>
+
+  <style>
+    :root{
+      --bg1:#070b1a;
+      --bg2:#0d1533;
+      --card:#0f1b3f;
+      --text:#eef2ff;
+      --muted:#b7c2ff;
+      --gold:#f4d06f;
+      --mint:#2dd4bf;
+      --line:rgba(255,255,255,.10);
+      --shadow: 0 18px 55px rgba(0,0,0,.45);
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, "Segoe UI", Tahoma, Arial, sans-serif;
+      color:var(--text);
+      min-height:100vh;
+      background:
+        radial-gradient(900px 500px at 15% 10%, rgba(244,208,111,.22), transparent 55%),
+        radial-gradient(700px 420px at 80% 20%, rgba(45,212,191,.18), transparent 55%),
+        linear-gradient(180deg, var(--bg1), var(--bg2));
+      overflow-x:hidden;
+      padding: 24px 16px 44px;
+    }
+
+    .stars{
+      position:fixed; inset:0;
+      background-image:
+        radial-gradient(2px 2px at 10% 20%, rgba(255,255,255,.35) 45%, transparent 46%),
+        radial-gradient(1.5px 1.5px at 30% 70%, rgba(255,255,255,.25) 45%, transparent 46%),
+        radial-gradient(1.8px 1.8px at 80% 35%, rgba(255,255,255,.28) 45%, transparent 46%),
+        radial-gradient(1.2px 1.2px at 60% 85%, rgba(255,255,255,.20) 45%, transparent 46%),
+        radial-gradient(1.6px 1.6px at 92% 60%, rgba(255,255,255,.22) 45%, transparent 46%);
+      opacity:.6;
+      pointer-events:none;
+      filter: blur(.1px);
+    }
+
+    .wrap{max-width: 760px; margin: 0 auto; display:grid; gap:16px;}
+    header{text-align:center; padding-top: 12px;}
+    .badge{
+      display:inline-flex; align-items:center; gap:10px;
+      padding:10px 14px;
+      border:1px solid var(--line);
+      background: rgba(15,27,63,.55);
+      border-radius:999px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+    .moon{
+      width:26px;height:26px;border-radius:50%;
+      background: radial-gradient(circle at 35% 30%, #fff7d6, var(--gold));
+      box-shadow: 0 0 20px rgba(244,208,111,.35);
+      position:relative; overflow:hidden;
+    }
+    .moon:after{
+      content:""; position:absolute; inset:-2px -2px -2px 40%;
+      background: rgba(7,11,26,.95); border-radius:50%;
+    }
+    h1{margin:14px 0 6px; font-size: clamp(22px, 4vw, 34px);}
+    .sub{margin:0; color:var(--muted); font-size: 14px; line-height:1.6}
+
+    .panel{
+      background: linear-gradient(180deg, rgba(15,27,63,.75), rgba(11,19,48,.70));
+      border:1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      overflow:hidden;
+    }
+    .head{
+      padding:16px 16px 12px;
+      border-bottom:1px solid var(--line);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .head h2{
+      margin:0;
+      font-size:16px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .lamp{
+      width:18px;height:18px; border-radius:6px;
+      background: linear-gradient(180deg, rgba(244,208,111,.95), rgba(255,183,3,.75));
+      box-shadow: 0 0 22px rgba(244,208,111,.25);
+      transform: rotate(10deg);
+    }
+    .body{ padding: 14px 16px 16px; }
+
+    label{display:block; margin: 10px 0 6px; color: var(--muted); font-size: 13px;}
+    input, select, button{font: inherit;}
+    input, select{
+      width:100%;
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(7,11,26,.45);
+      color: var(--text);
+      outline:none;
+    }
+    input:focus, select:focus{
+      border-color: rgba(244,208,111,.55);
+      box-shadow: 0 0 0 4px rgba(244,208,111,.12);
+    }
+
+    .row{display:grid; grid-template-columns: 1fr 1fr; gap:10px;}
+    .actions{display:flex; gap:10px; margin-top:14px; flex-wrap:wrap;}
+    button{
+      cursor:pointer;
+      border:none;
+      padding:12px 14px;
+      border-radius:14px;
+      background: rgba(244,208,111,.18);
+      color:#fff;
+      border:1px solid rgba(244,208,111,.35);
+    }
+    button:hover{ filter: brightness(1.07); }
+    .primary{
+      background: linear-gradient(180deg, rgba(244,208,111,.95), rgba(255,183,3,.85));
+      color:#1b1301;
+      border-color: rgba(255,183,3,.55);
+      font-weight: 700;
+    }
+    .ghost{
+      background: rgba(255,255,255,.06);
+      border-color: rgba(255,255,255,.16);
+      color:#fff;
+    }
+
+    .note{margin-top:10px; color: var(--muted); font-size: 12.5px; line-height:1.6;}
+    .pill{
+      display:inline-block;
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(7,11,26,.35);
+      font-size: 13px;
+      margin-top:8px;
+    }
+
+    .bar{
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.10);
+      overflow: hidden;
+      border:1px solid rgba(255,255,255,.12);
+      margin-top:12px;
+    }
+    .bar > div{
+      height:100%;
+      width:0%;
+      background: linear-gradient(90deg, rgba(45,212,191,.85), rgba(244,208,111,.90));
+      border-radius:999px;
+    }
+
+    .hidden{display:none !important;}
+  </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+</head>
+
+<body>
+  <div class="stars" aria-hidden="true"></div>
+
+  <div class="wrap">
+    <header>
+      <div class="badge"><span class="moon" aria-hidden="true"></span><strong>متابعة قراءة القرآن — رمضان كريم 🌙</strong></div>
+      <h1>🌙✨ كــل عــام وأنــتــم بــخــيــر ✨🌙</h1>
+      <p class="sub">🌙💛 رمـضـان شـهـر الـمـحـبـة والـغـفـران، أعـاده الله عـلـيـنـا وعـلـيـكـم بـالـيُـمـن والـبـركـات 💛🌙</p>
+    </header>
+
+    <!-- تسجيل الدخول -->
+    <section class="panel" id="authPanel">
+      <div class="head">
+        <h2><span class="lamp" aria-hidden="true"></span> تسجيل الدخول</h2>
+      </div>
+      <div class="body">
+        <label for="email">الإيميل</label>
+        <input id="email" type="email" placeholder="name@example.com" autocomplete="email" />
+        <div class="actions">
+          <button class="primary" id="btnSendLink">إرسال رابط الدخول</button>
+        </div>
+        <div class="note" id="authMsg"></div>
+      </div>
+    </section>
+
+    <!-- صفحة المستخدم -->
+    <section class="panel hidden" id="appPanel">
+      <div class="head">
+        <h2><span class="lamp" aria-hidden="true"></span> بياناتي</h2>
+        <button class="ghost" id="btnLogout">تسجيل خروج</button>
+      </div>
+
+      <div class="body">
+        <div class="pill">مسجل كـ: <b id="userEmail"></b></div>
+
+        <label for="display_name">الاسم المعروض</label>
+        <input id="display_name" type="text" placeholder="مثال: أحمد" />
+
+        <div class="row">
+          <div>
+            <label for="juz">الجزء</label>
+            <select id="juz"></select>
+          </div>
+          <div>
+            <label for="surah">السورة</label>
+            <select id="surah"></select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label for="ayah">رقم الآية</label>
+            <input id="ayah" type="number" inputmode="numeric" min="1" placeholder="مثال: 25" />
+          </div>
+          <div>
+            <label for="updated_at">آخر تحديث</label>
+            <input id="updated_at" type="text" disabled />
+          </div>
+        </div>
+
+        <div class="bar"><div id="barFill"></div></div>
+        <div class="note">تقدّم تقريبي حسب الجزء: <b id="percent">0%</b></div>
+
+        <div class="actions">
+          <button class="primary" id="btnSave">حفظ</button>
+          <a href="leaderboard.html" class="ghost" style="text-decoration:none; display:inline-block; padding:12px 14px; border-radius:14px;">
+    عرض القائمة العامة
+  </a>
+        </div>
+        <div class="note" id="saveMsg"></div>
+      </div>
+    </section>
+  </div>
+
+<script>
+(() => {
+  // مهم: إذا صار في سكربت ثاني بالغلط ما يصير تكرار
+  if (window.__RAMADAN_APP_LOADED__) return;
+  window.__RAMADAN_APP_LOADED__ = true;
+
+  const SUPABASE_URL = "https://lutlkoijpchatrutxdas.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_nwm2cpEpkCl2h46M6bX3oQ_WoB2kF3Q";
+
+  const SURAH_NAMES = [
+    "الفاتحة","البقرة","آل عمران","النساء","المائدة","الأنعام","الأعراف","الأنفال","التوبة","يونس",
+    "هود","يوسف","الرعد","إبراهيم","الحجر","النحل","الإسراء","الكهف","مريم","طه",
+    "الأنبياء","الحج","المؤمنون","النور","الفرقان","الشعراء","النمل","القصص","العنكبوت","الروم",
+    "لقمان","السجدة","الأحزاب","سبأ","فاطر","يس","الصافات","ص","الزمر","غافر",
+    "فصلت","الشورى","الزخرف","الدخان","الجاثية","الأحقاف","محمد","الفتح","الحجرات","ق",
+    "الذاريات","الطور","النجم","القمر","الرحمن","الواقعة","الحديد","المجادلة","الحشر","الممتحنة",
+    "الصف","الجمعة","المنافقون","التغابن","الطلاق","التحريم","الملك","القلم","الحاقة","المعارج",
+    "نوح","الجن","المزمل","المدثر","القيامة","الإنسان","المرسلات","النبأ","النازعات","عبس",
+    "التكوير","الإنفطار","المطففين","الإنشقاق","البروج","الطارق","الأعلى","الغاشية","الفجر","البلد",
+    "الشمس","الليل","الضحى","الشرح","التين","العلق","القدر","البينة","الزلزلة","العاديات",
+    "القارعة","التكاثر","العصر","الهمزة","الفيل","قريش","الماعون","الكوثر","الكافرون","النصر",
+    "المسد","الإخلاص","الفلق","الناس"
+  ];
+
+  // لازم مكتبة supabase تكون محمّلة
+  if (!window.supabase) {
+    alert("مكتبة Supabase ما انحمّلت. تأكد إنك فاتح الصفحة عبر Live Server وإن سطر supabase-js موجود بالـ <head>.");
+    return;
+  }
+
+  // استخدم var بدل const لتجنب خطأ duplicate حتى لو بالغلط تكرر سكربت
+  var sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  console.log("supabase client ok", sb);
+
+  // DOM
+  const authPanel = document.getElementById('authPanel');
+  const appPanel  = document.getElementById('appPanel');
+  const emailInput = document.getElementById('email');
+  const btnSendLink = document.getElementById('btnSendLink');
+  const authMsg = document.getElementById('authMsg');
+
+  const btnLogout = document.getElementById('btnLogout');
+  const userEmail = document.getElementById('userEmail');
+
+  const displayName = document.getElementById('display_name');
+  const juz   = document.getElementById('juz');
+  const surah = document.getElementById('surah');
+  const ayah  = document.getElementById('ayah');
+  const updatedAt = document.getElementById('updated_at');
+
+  const btnSave = document.getElementById('btnSave');
+  const saveMsg = document.getElementById('saveMsg');
+
+  const barFill = document.getElementById('barFill');
+  const percentEl = document.getElementById('percent');
+
+  function initSelects(){
+    juz.innerHTML = "";
+    for(let i=1;i<=30;i++){
+      const o=document.createElement('option');
+      o.value=String(i);
+      o.textContent="الجزء " + i;
+      juz.appendChild(o);
+    }
+    surah.innerHTML = "";
+    SURAH_NAMES.forEach((name, idx)=>{
+      const o=document.createElement('option');
+      o.value=String(idx+1);
+      o.textContent=(idx+1) + " — " + name;
+      surah.appendChild(o);
+    });
+  }
+
+  function percentFromJuz(j){
+    const v = Math.max(1, Math.min(30, Number(j)||1));
+    return Math.round((v/30)*100);
+  }
+
+  function setProgressUI(j){
+    const p = percentFromJuz(j);
+    barFill.style.width = p + "%";
+    percentEl.textContent = p + "%";
+  }
+
+  function showAuth(){
+    authPanel.classList.remove('hidden');
+    appPanel.classList.add('hidden');
+  }
+  function showApp(){
+    authPanel.classList.add('hidden');
+    appPanel.classList.remove('hidden');
+  }
+
+  async function loadMyRow(){
+    saveMsg.textContent = "";
+    const { data: { user } } = await sb.auth.getUser();
+    if(!user) return;
+
+    userEmail.textContent = user.email || "";
+
+    const { data, error } = await sb
+      .from('quran_progress')
+      .select('*')
+      .eq('user_id', user.id)
+      .maybeSingle();
+
+    if(error){
+      saveMsg.textContent = "خطأ بتحميل بياناتك: " + error.message;
+      return;
+    }
+
+    if(data){
+      displayName.value = data.display_name || "";
+      juz.value = String(data.juz || 1);
+      surah.value = String(data.surah || 1);
+      ayah.value = (data.ayah ?? "") === null ? "" : (data.ayah ?? "");
+      updatedAt.value = new Date(data.updated_at).toLocaleString('ar');
+      setProgressUI(data.juz);
+    }else{
+      displayName.value = "";
+      juz.value = "1";
+      surah.value = "1";
+      ayah.value = "";
+      updatedAt.value = "—";
+      setProgressUI(1);
+    }
+  }
+
+  async function saveMyRow(){
+    saveMsg.textContent = "";
+    const { data: { user } } = await sb.auth.getUser();
+    if(!user){
+      saveMsg.textContent = "لازم تسجل دخول أولًا.";
+      return;
+    }
+
+    const payload = {
+      user_id: user.id,
+      display_name: (displayName.value || "").trim(),
+      juz: Number(juz.value),
+      surah: Number(surah.value),
+      ayah: ayah.value ? Number(ayah.value) : null,
+      updated_at: new Date().toISOString()
+    };
+
+    const { error } = await sb
+      .from('quran_progress')
+      .upsert(payload, { onConflict: 'user_id' });
+if (errPrivate) {
+  saveMsg.textContent = "ما زبط الحفظ (خاص): " + errPrivate.message;
+  return;
+}
+
+const { error: errPublic } = await sb
+  .from('quran_public_progress')
+  .upsert(payload, { onConflict: 'user_id' });
+
+if (errPublic) {
+  saveMsg.textContent = "تم الحفظ الخاص ✅ لكن في مشكلة بالعرض العام: " + errPublic.message;
+  return;
+}
+
+saveMsg.textContent = "✅ تم الحفظ (خاص + عام)";
+await loadMyRow();
+  }
+
+  btnSendLink.addEventListener('click', async ()=>{
+    authMsg.textContent = "";
+    const email = (emailInput.value || "").trim();
+    if(!email){
+      authMsg.textContent = "اكتب الإيميل.";
+      return;
+    }
+
+    const { data, error } = await sb.auth.signInWithOtp({
+      email,
+      options: { emailRedirectTo: window.location.origin + window.location.pathname }
+    });
+
+    console.log("otp result", { data, error });
+    authMsg.textContent = error ? ("خطأ: " + error.message) : "✅ تم إرسال رابط الدخول على الإيميل.";
+  });
+
+  btnLogout.addEventListener('click', async ()=>{
+    await sb.auth.signOut();
+    showAuth();
+  });
+
+  btnSave.addEventListener('click', saveMyRow);
+  juz.addEventListener('change', ()=> setProgressUI(juz.value));
+
+  sb.auth.onAuthStateChange(async (_event, session)=>{
+    if(session){
+      showApp();
+      await loadMyRow();
+    }else{
+      showAuth();
+    }
+  });
+
+  // Start
+  initSelects();
+  (async ()=>{
+    const { data: { session } } = await sb.auth.getSession();
+    if(session){
+      showApp();
+      await loadMyRow();
+    }else{
+      showAuth();
+    }
+  })();
+})();
+</script>
+
+
+</body>
+</html>

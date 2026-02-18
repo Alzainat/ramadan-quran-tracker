@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>قائمة التقدّم - رمضان 🌙</title>
+
+  <style>
+    :root{
+      --bg1:#070b1a; --bg2:#0d1533; --card:#0f1b3f;
+      --text:#eef2ff; --muted:#b7c2ff; --gold:#f4d06f; --mint:#2dd4bf;
+      --line:rgba(255,255,255,.10); --shadow:0 18px 55px rgba(0,0,0,.45);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui, -apple-system, "Segoe UI", Tahoma, Arial, sans-serif;
+      min-height:100vh;
+      background:
+        radial-gradient(900px 500px at 15% 10%, rgba(244,208,111,.22), transparent 55%),
+        radial-gradient(700px 420px at 80% 20%, rgba(45,212,191,.18), transparent 55%),
+        linear-gradient(180deg, var(--bg1), var(--bg2));
+      padding: 24px 16px 44px;
+    }
+    .wrap{max-width:900px;margin:0 auto;display:grid;gap:16px}
+    header{text-align:center}
+    .badge{
+      display:inline-flex;align-items:center;gap:10px;
+      padding:10px 14px;border:1px solid var(--line);
+      background: rgba(15,27,63,.55);
+      border-radius:999px; box-shadow:var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+    .moon{width:26px;height:26px;border-radius:50%;
+      background: radial-gradient(circle at 35% 30%, #fff7d6, var(--gold));
+      position:relative;overflow:hidden; box-shadow:0 0 20px rgba(244,208,111,.35);}
+    .moon:after{content:"";position:absolute;inset:-2px -2px -2px 40%;
+      background: rgba(7,11,26,.95);border-radius:50%;}
+    h1{margin:14px 0 6px;font-size:clamp(22px,4vw,34px)}
+    .sub{margin:0;color:var(--muted);font-size:14px;line-height:1.6}
+
+    .panel{
+      background: linear-gradient(180deg, rgba(15,27,63,.75), rgba(11,19,48,.70));
+      border:1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      overflow:hidden;
+    }
+    .head{padding:16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+    .head h2{margin:0;font-size:16px;display:flex;align-items:center;gap:10px}
+    .lamp{width:18px;height:18px;border-radius:6px;background:linear-gradient(180deg, rgba(244,208,111,.95), rgba(255,183,3,.75));}
+    .body{padding:14px 16px 16px}
+    input,select{font:inherit}
+    .controls{display:flex;gap:10px;flex-wrap:wrap}
+    .controls input,.controls select{
+      padding:10px 12px;border-radius:14px;border:1px solid rgba(255,255,255,.14);
+      background: rgba(7,11,26,.45); color:var(--text); outline:none;
+    }
+    ul{list-style:none;margin:0;padding:0}
+    li{padding:14px 16px;border-bottom:1px solid var(--line);display:grid;gap:8px}
+    li:last-child{border-bottom:none}
+    .top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;flex-wrap:wrap}
+    .name{font-weight:800;display:flex;align-items:center;gap:10px}
+    .dot{width:10px;height:10px;border-radius:50%;background:var(--mint);box-shadow:0 0 16px rgba(45,212,191,.35)}
+    .meta{color:var(--muted);font-size:13px}
+    .pill{display:inline-block;padding:8px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.14);
+      background: rgba(7,11,26,.35);font-size:13px}
+    .bar{height:10px;border-radius:999px;background:rgba(255,255,255,.10);overflow:hidden;border:1px solid rgba(255,255,255,.12)}
+    .bar>div{height:100%;width:0%;background:linear-gradient(90deg, rgba(45,212,191,.85), rgba(244,208,111,.90))}
+    a.btn{
+      text-decoration:none; display:inline-block;
+      padding:10px 12px;border-radius:14px;
+      border:1px solid rgba(244,208,111,.35);
+      background: rgba(244,208,111,.18); color:#fff;
+    }
+  </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="badge"><span class="moon"></span><strong>قائمة التقدّم — رمضان كريم 🌙</strong></div>
+      <h1>عرض عام (قراءة فقط)</h1>
+      <p class="sub">البيانات هون للعرض فقط — التعديل يكون من صفحة “بياناتي”.</p>
+    </header>
+
+    <section class="panel">
+      <div class="head">
+        <h2><span class="lamp"></span> المشاركون</h2>
+        <div class="controls">
+          <select id="sort">
+            <option value="updated_desc">الأحدث تحديثًا</option>
+            <option value="juz_desc">الأعلى جزء</option>
+            <option value="name_asc">الاسم (أ-ي)</option>
+          </select>
+          <input id="search" placeholder="بحث بالاسم..." />
+          <a class="btn" href="ramadan.html">تحديث بياناتي</a>
+        </div>
+      </div>
+      <div class="body">
+        <ul id="list"></ul>
+        <div id="empty" class="meta" style="text-align:center; padding:12px; display:none;">
+          لسا ما في بيانات… أول واحد يحفظ بيظهر هون ✨
+        </div>
+      </div>
+    </section>
+  </div>
+
+<script>
+  const SUPABASE_URL = "https://lutlkoijpchatrutxdas.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_nwm2cpEpkCl2h46M6bX3oQ_WoB2kF3Q";
+
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  const list = document.getElementById('list');
+  const empty = document.getElementById('empty');
+  const sort = document.getElementById('sort');
+  const search = document.getElementById('search');
+
+  function percentFromJuz(j){
+    const v = Math.max(1, Math.min(30, Number(j)||1));
+    return Math.round((v/30)*100);
+  }
+
+  function esc(s){
+    return String(s ?? "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;");
+  }
+
+  async function load(){
+    const q = (search.value || "").trim().toLowerCase();
+
+    let query = sb
+      .from('quran_public_progress')
+      .select('display_name,juz,surah,ayah,updated_at');
+
+    // ترتيب
+    if(sort.value === "juz_desc"){
+      query = query.order('juz', { ascending:false }).order('updated_at', { ascending:false });
+    }else if(sort.value === "name_asc"){
+      query = query.order('display_name', { ascending:true });
+    }else{
+      query = query.order('updated_at', { ascending:false });
+    }
+
+    const { data, error } = await query;
+    if(error){
+      empty.style.display = "block";
+      empty.textContent = "خطأ بالتحميل: " + error.message;
+      list.innerHTML = "";
+      return;
+    }
+
+    let rows = data || [];
+    if(q){
+      rows = rows.filter(r => (r.display_name || "").toLowerCase().includes(q));
+    }
+
+    list.innerHTML = "";
+    if(rows.length === 0){
+      empty.style.display = "block";
+      return;
+    }
+    empty.style.display = "none";
+
+    rows.forEach(r=>{
+      const p = percentFromJuz(r.juz);
+      const li = document.createElement('li');
+      li.innerHTML = `
+        <div class="top">
+          <div class="name"><span class="dot"></span>${esc(r.display_name || "بدون اسم")}</div>
+          <div class="meta">${new Date(r.updated_at).toLocaleString('ar')}</div>
+        </div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap">
+          <span class="pill">الجزء: <b>${esc(r.juz)}</b></span>
+          <span class="pill">السورة: <b>${esc(r.surah)}</b></span>
+          <span class="pill">الآية: <b>${esc(r.ayah ?? "—")}</b></span>
+          <span class="pill">${p}% تقريبًا</span>
+        </div>
+        <div class="bar"><div style="width:${p}%"></div></div>
+      `;
+      list.appendChild(li);
+    });
+  }
+
+  sort.addEventListener('change', load);
+  search.addEventListener('input', load);
+
+  load();
+  setInterval(load, 15000); // تحديث تلقائي كل 15 ثانية
+</script>
+</body>
+</html>
